@@ -3,6 +3,16 @@ const router = express.Router();
 const { Basket, BasketItem, Item } = require('../models');
 const {authenticate} = require('../middlewares/auth')
 
+// 
+router.post('/', authenticate, async (req, res) => {
+    try {
+        const item = await Item.create(req.body);
+        res.status(201).json(item);
+    } catch (err) {
+        res.status(500).json({ message: 'Error creating basket', error });
+    }
+});
+
 router.get('/', async (req, res) => {
     try {
         const items = await Item.findAll(); //This will find every ITEM inside the "Item" 
@@ -11,7 +21,6 @@ router.get('/', async (req, res) => {
         res.status(500).json({ message: 'Error retrieving items', error });
       }
 })
-
 
 router.get('/:id', async (req, res) => {
     try {
